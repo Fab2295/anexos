@@ -26,6 +26,7 @@ modules:
     requires:
       # - name: anexos-attachments
       - name: anexos-db
+      - name: anexos-auth
       # - name: anexos-malware-scanner
 
   - name: anexos-db-deployer
@@ -47,6 +48,15 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+  - name: anexos-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: anexos-${org}-${space}
+        tenant-mode: dedicated
   # - name: anexos-malware-scanner
   #   type: org.cloudfoundry.managed-service
   #   parameters:
