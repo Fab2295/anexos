@@ -22,7 +22,6 @@
   "cds": {
     "requires": {
       "[production]": {
-        "malware-scanner": true,
         "auth": "basic",
         "db": "hana"
       }
