@@ -27,6 +27,7 @@ modules:
       # - name: anexos-attachments
       - name: anexos-db
       - name: anexos-auth
+      - name: anexos-destination
       # - name: anexos-malware-scanner
 
   - name: anexos-db-deployer
@@ -52,6 +53,7 @@ modules:
           url: ~{srv-url}
           forwardAuthToken: true
       - name: anexos-auth
+      - name: anexos-destination
     provides:
       - name: app-api
         properties:
@@ -78,6 +80,11 @@ resources:
       config:
         xsappname: anexos-${org}-${space}
         tenant-mode: dedicated
+  - name: anexos-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
   # - name: anexos-malware-scanner
   #   type: org.cloudfoundry.managed-service
   #   parameters:

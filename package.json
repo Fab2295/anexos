@@ -23,7 +23,8 @@
     "requires": {
       "[production]": {
         "auth": "xsuaa",
-        "db": "hana"
+        "db": "hana",
+        "destinations": true
       }
     },
     "sql": {
