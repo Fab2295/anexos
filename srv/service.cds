@@ -8,3 +8,6 @@ define service Material {
             // attachments        : Composition of many Attachments;
     }
 }
+
+
+annotate Material with @(requires: ['authenticated-user']);
