@@ -1,0 +1,19 @@
+COLUMN TABLE Material_Materiais_attachments_drafts (
+  up__ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP NULL,
+  createdBy NVARCHAR(255) NULL,
+  modifiedAt TIMESTAMP NULL,
+  modifiedBy NVARCHAR(255) NULL,
+  ID NVARCHAR(36) NOT NULL,
+  url NVARCHAR(5000) NULL,
+  content BLOB NULL,
+  "MIMETYPE" NVARCHAR(5000) NULL DEFAULT 'application/octet-stream',
+  filename NVARCHAR(5000) NULL,
+  status NVARCHAR(5000) NULL DEFAULT 'Unscanned',
+  note NVARCHAR(5000) NULL,
+  IsActiveEntity BOOLEAN,
+  HasActiveEntity BOOLEAN,
+  HasDraftEntity BOOLEAN,
+  DraftAdministrativeData_DraftUUID NVARCHAR(36) NOT NULL,
+  PRIMARY KEY(up__ID, ID)
+)

@@ -1,0 +1,15 @@
+COLUMN TABLE Material_Materiais_attachments (
+  up__ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  ID NVARCHAR(36) NOT NULL,
+  url NVARCHAR(5000),
+  content BLOB,
+  "MIMETYPE" NVARCHAR(5000) DEFAULT 'application/octet-stream',
+  filename NVARCHAR(5000),
+  status NVARCHAR(5000) DEFAULT 'Unscanned',
+  note NVARCHAR(5000),
+  PRIMARY KEY(up__ID, ID)
+)

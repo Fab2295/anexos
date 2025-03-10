@@ -1,0 +1,9 @@
+COLUMN TABLE Material_Materiais_drafts (
+  ID NVARCHAR(36) NOT NULL,
+  descricao_material NVARCHAR(5000) NULL,
+  IsActiveEntity BOOLEAN,
+  HasActiveEntity BOOLEAN,
+  HasDraftEntity BOOLEAN,
+  DraftAdministrativeData_DraftUUID NVARCHAR(36) NOT NULL,
+  PRIMARY KEY(ID)
+)

@@ -1,0 +1,5 @@
+COLUMN TABLE Material_Materiais (
+  ID NVARCHAR(36) NOT NULL,
+  descricao_material NVARCHAR(5000),
+  PRIMARY KEY(ID)
+)
