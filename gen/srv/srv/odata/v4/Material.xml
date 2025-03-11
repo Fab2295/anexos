@@ -6,14 +6,8 @@
   <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
     <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
   </edmx:Reference>
-  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/HTML5.xml">
-    <edmx:Include Alias="HTML5" Namespace="com.sap.vocabularies.HTML5.v1"/>
-  </edmx:Reference>
   <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
     <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
-  </edmx:Reference>
-  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
-    <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
   </edmx:Reference>
   <edmx:DataServices>
     <Schema Namespace="Material" xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -27,12 +21,7 @@
       </Annotation>
       <EntityContainer Name="EntityContainer">
         <EntitySet Name="Materiais" EntityType="Material.Materiais">
-          <NavigationPropertyBinding Path="attachments" Target="Materiais_attachments"/>
           <NavigationPropertyBinding Path="SiblingEntity" Target="Materiais"/>
-        </EntitySet>
-        <EntitySet Name="Materiais_attachments" EntityType="Material.Materiais_attachments">
-          <NavigationPropertyBinding Path="up_" Target="Materiais"/>
-          <NavigationPropertyBinding Path="SiblingEntity" Target="Materiais_attachments"/>
         </EntitySet>
       </EntityContainer>
       <EntityType Name="Materiais">
@@ -42,9 +31,6 @@
         </Key>
         <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
         <Property Name="descricao_material" Type="Edm.String"/>
-        <NavigationProperty Name="attachments" Type="Collection(Material.Materiais_attachments)" Partner="up_">
-          <OnDelete Action="Cascade"/>
-        </NavigationProperty>
         <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
         <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
         <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
@@ -64,42 +50,10 @@
         <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
         <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
       </EntityType>
-      <EntityType Name="Materiais_attachments">
-        <Key>
-          <PropertyRef Name="up__ID"/>
-          <PropertyRef Name="ID"/>
-          <PropertyRef Name="IsActiveEntity"/>
-        </Key>
-        <NavigationProperty Name="up_" Type="Material.Materiais" Nullable="false" Partner="attachments">
-          <ReferentialConstraint Property="up__ID" ReferencedProperty="ID"/>
-        </NavigationProperty>
-        <Property Name="up__ID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
-        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
-        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
-        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
-        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="url" Type="Edm.String"/>
-        <Property Name="content" Type="Edm.Stream"/>
-        <Property Name="mimeType" Type="Edm.String" DefaultValue="application/octet-stream"/>
-        <Property Name="filename" Type="Edm.String"/>
-        <Property Name="status" Type="Edm.String" DefaultValue="Unscanned"/>
-        <Property Name="note" Type="Edm.String"/>
-        <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
-        <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
-        <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
-        <NavigationProperty Name="DraftAdministrativeData" Type="Material.DraftAdministrativeData" ContainsTarget="true"/>
-        <NavigationProperty Name="SiblingEntity" Type="Material.Materiais_attachments"/>
-      </EntityType>
       <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
         <Parameter Name="in" Type="Material.Materiais"/>
         <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
         <ReturnType Type="Material.Materiais"/>
-      </Action>
-      <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
-        <Parameter Name="in" Type="Material.Materiais_attachments"/>
-        <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
-        <ReturnType Type="Material.Materiais_attachments"/>
       </Action>
       <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
         <Parameter Name="in" Type="Material.Materiais"/>
@@ -141,10 +95,6 @@
               <PropertyValue Property="ID" String="GeneratedFacet1"/>
               <PropertyValue Property="Label" String="General Information"/>
               <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#GeneratedGroup1"/>
-            </Record>
-            <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="Target" AnnotationPath="attachments/@UI.LineItem"/>
-              <PropertyValue Property="Label" String="{i18n>Attachments}"/>
             </Record>
           </Collection>
         </Annotation>
@@ -203,161 +153,6 @@
       <Annotations Target="Material.DraftAdministrativeData/DraftIsProcessedByMe">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments">
-        <Annotation Term="UI.HeaderInfo">
-          <Record Type="UI.HeaderInfoType">
-            <PropertyValue Property="TypeName" String="{i18n>Attachment}"/>
-            <PropertyValue Property="TypeNamePlural" String="{i18n>Attachments}"/>
-          </Record>
-        </Annotation>
-        <Annotation Term="UI.LineItem">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="content"/>
-              <Annotation Term="HTML5.CssDefaults">
-                <Record Type="HTML5.CssDefaultsType">
-                  <PropertyValue Property="width" String="30%"/>
-                </Record>
-              </Annotation>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="status"/>
-              <Annotation Term="HTML5.CssDefaults">
-                <Record Type="HTML5.CssDefaultsType">
-                  <PropertyValue Property="width" String="10%"/>
-                </Record>
-              </Annotation>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="createdAt"/>
-              <Annotation Term="HTML5.CssDefaults">
-                <Record Type="HTML5.CssDefaultsType">
-                  <PropertyValue Property="width" String="20%"/>
-                </Record>
-              </Annotation>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="createdBy"/>
-              <Annotation Term="HTML5.CssDefaults">
-                <Record Type="HTML5.CssDefaultsType">
-                  <PropertyValue Property="width" String="15%"/>
-                </Record>
-              </Annotation>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="note"/>
-              <Annotation Term="HTML5.CssDefaults">
-                <Record Type="HTML5.CssDefaultsType">
-                  <PropertyValue Property="width" String="25%"/>
-                </Record>
-              </Annotation>
-            </Record>
-          </Collection>
-        </Annotation>
-        <Annotation Term="UI.MediaResource">
-          <Record Type="UI.MediaResourceType">
-            <PropertyValue Property="Stream" Path="content"/>
-          </Record>
-        </Annotation>
-      </Annotations>
-      <Annotations Target="Material.EntityContainer/Materiais_attachments">
-        <Annotation Term="Common.DraftNode">
-          <Record Type="Common.DraftNodeType">
-            <PropertyValue Property="PreparationAction" String="Material.draftPrepare"/>
-          </Record>
-        </Annotation>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/createdAt">
-        <Annotation Term="UI.HiddenFilter" Bool="true"/>
-        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
-        <Annotation Term="Core.Immutable" Bool="true"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/createdBy">
-        <Annotation Term="UI.HiddenFilter" Bool="true"/>
-        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
-        <Annotation Term="Core.Immutable" Bool="true"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
-        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/modifiedAt">
-        <Annotation Term="UI.HiddenFilter" Bool="true"/>
-        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/modifiedBy">
-        <Annotation Term="UI.HiddenFilter" Bool="true"/>
-        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
-        <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/ID">
-        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/content">
-        <Annotation Term="Core.ContentDisposition">
-          <Record Type="Core.ContentDispositionType">
-            <PropertyValue Property="Filename" Path="filename"/>
-            <PropertyValue Property="Type" String="inline"/>
-          </Record>
-        </Annotation>
-        <Annotation Term="Core.MediaType" Path="mimeType"/>
-        <Annotation Term="Common.Label" String="Attachment"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/mimeType">
-        <Annotation Term="Core.IsMediaType" Bool="true"/>
-        <Annotation Term="Common.Label" String="Media Type"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/filename">
-        <Annotation Term="Common.Label" String="Filename"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/status">
-        <Annotation Term="Common.Label" String="Scan Status"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Validation.AllowedValues">
-          <Collection>
-            <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="Unscanned"/>
-              <PropertyValue Property="Value" String="Unscanned"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="Scanning"/>
-              <PropertyValue Property="Value" String="Scanning"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="Infected"/>
-              <PropertyValue Property="Value" String="Infected"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="Clean"/>
-              <PropertyValue Property="Value" String="Clean"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="Failed"/>
-              <PropertyValue Property="Value" String="Failed"/>
-            </Record>
-          </Collection>
-        </Annotation>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/note">
-        <Annotation Term="Common.Label" String="Note"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/IsActiveEntity">
-        <Annotation Term="UI.Hidden" Bool="true"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/HasActiveEntity">
-        <Annotation Term="UI.Hidden" Bool="true"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/HasDraftEntity">
-        <Annotation Term="UI.Hidden" Bool="true"/>
-      </Annotations>
-      <Annotations Target="Material.Materiais_attachments/DraftAdministrativeData">
-        <Annotation Term="UI.Hidden" Bool="true"/>
       </Annotations>
     </Schema>
   </edmx:DataServices>
